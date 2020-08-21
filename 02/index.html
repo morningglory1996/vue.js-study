@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <div id="app">
+      <p v-if="ok">OK</p>
+      <p v-else-if="maybeOk">maybe OK</p>
+      <p v-else>NOT OK</p>
+
+      <template v-if="ok">
+        <p>HELLO</p>
+        <p>Good bye</p>
+        <p>TEST</p>
+      </template>
+      <button @click="ok = !ok">ボタン</button>
+      <!-- 頻繁に切り替える場合: v-show ほとんど変わらない場合：v-if -->
+      <p v-show="ok">SHOW</p>
+
+      <ul>
+        <li v-for="(fruit, index) of fruits">{{index}} {{fruit}}</li>
+      </ul>
+
+      <ul>
+        <li v-for="(value, key, index) of object">
+          {{index}} {{key}}: {{value}}
+        </li>
+      </ul>
+
+      <ul>
+        <template v-for="fruit of fruits">
+          <li>{{fruit}}</li>
+          <hr />
+        </template>
+      </ul>
+
+      <ul>
+        <li v-for="n of 10">{{n}}</li>
+      </ul>
+      <!-- v-forディレクティブを使用する際はkey属性を使用する -->
+      <ul>
+        <div v-for="fruit of fruits" :key="fruit">
+          <p>{{fruit}}</p>
+          <input type="text" />
+        </div>
+        <button @click="remove">先頭を削除</button>
+      </ul>
+    </div>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          ok: false,
+          maybeOk: true,
+          fruits: ["リンゴ", "バナナ", "ブドウ"],
+          object: {
+            firstName: "tarou",
+            lastName: "tanaka",
+            age: 24,
+          },
+        },
+        methods: {
+          remove: function () {
+            this.fruits.shift();
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

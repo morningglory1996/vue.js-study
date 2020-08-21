@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <div id="app1">
+      <p>{{message}}</p>
+    </div>
+
+    <div id="app2">
+      <p>{{message}}</p>
+      <button @click="changeMessage1">インスタンス1のmessage変更</button>
+    </div>
+
+    <div id="app">
+      <p>{{message}}</p>
+      <p>{{myData}}</p>
+    </div>
+
+    <div id="test"></div>
+
+    <div id="test2"></div>
+
+    <div id="test3">
+      <h1>こんにちは{{name}}</h1>
+      <button @click="name = 'yamada'">名前を変更</button>
+      <button @click="destroy">インスタンスを破壊</button>
+    </div>
+
+    <script>
+      var data = {
+        message: "こんにちは",
+        name: "太郎",
+      };
+
+      var vm = new Vue({
+        el: "#app",
+        data: data,
+        computed: {
+          myData: function () {
+            return this.$data;
+          },
+        },
+      });
+
+      // 後付けのプロパティはリアクティブにならない(getter setterが作成されないため)
+      vm.age = 24;
+      // elプロパティの代わりになる(基本的には使わない)
+      vm.$mount("#app");
+
+      new Vue({
+        el: "#test",
+        data: {
+          name: "太郎",
+        },
+        // 直接テンプレートを入力することもできる(基本的には使わない)
+        template: "<h1>こんにちは{{name}}</h1>",
+      });
+
+      new Vue({
+        data: {
+          name: "太郎",
+        },
+        render: function (createElement) {
+          // 仮想ノードの情報を返す
+          return createElement("h1", "renderプロパティで作成");
+        },
+      }).$mount("#test2");
+
+      var vm1 = new Vue({
+        el: "#app1",
+        data: {
+          message: "インスタンス1",
+        },
+      });
+
+      new Vue({
+        el: "#test3",
+        data: {
+          name: "taro",
+        },
+        beforeCreate: function () {
+          console.log("beforeCreate");
+        },
+        created: function () {
+          console.log("created");
+        },
+        beforeMount: function () {
+          console.log("beforeMount");
+        },
+        mounted: function () {
+          console.log("mounted");
+        },
+        beforeUpdate: function () {
+          console.log("beforeUpdate");
+        },
+        updated: function () {
+          console.log("updated");
+        },
+        beforeDestroy: function () {
+          console.log("beforeDestroy");
+        },
+        destroyed: function () {
+          console.log("destroyed");
+        },
+        methods: {
+          destroy: function () {
+            this.$destroy();
+          },
+        },
+      });
+
+      var vm2 = new Vue({
+        el: "#app2",
+        data: {
+          message: "インスタンス2",
+        },
+        methods: {
+          changeMessage1: function () {
+            vm1.message = "インスタンス2から変えました";
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
